@@ -28,7 +28,7 @@ export default function Home(props: any) {
         </h1>
         <p className="my-9 text-xl">Please login to contunue</p>
         <button
-          className="rounded-full bg-[hsl(280,100%,70%)] bg-white/10 px-10 py-3 font-semibold text-black no-underline transition hover:bg-[hsl(280,100%,70%)]/20"
+          className="rounded-full bg-[hsl(280,100%,70%)] px-10 py-3 font-semibold text-black no-underline transition hover:bg-[hsl(280,100%,70%)]/20"
           onClick={sessionData ? () => void signOut() : () => void signIn()}
         >
           {sessionData ? "Logout" : "Login"}
