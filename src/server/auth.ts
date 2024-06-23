@@ -7,6 +7,7 @@ import {
 } from "next-auth";
 import { type Adapter } from "next-auth/adapters";
 import GoogleProvider from "next-auth/providers/google";
+import { redirect } from "next/navigation";
 
 import { env } from "~/env";
 import { db } from "~/server/db";
@@ -72,6 +73,7 @@ export const authOptions: NextAuthOptions = {
           },
         });
       }
+      redirect("/dashboard");
     }
   }
 };
