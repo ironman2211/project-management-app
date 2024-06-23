@@ -6,7 +6,7 @@ import {
   type NextAuthOptions,
 } from "next-auth";
 import { type Adapter } from "next-auth/adapters";
-import DiscordProvider from "next-auth/providers/discord";
+import GoogleProvider from "next-auth/providers/google";
 
 import { env } from "~/env";
 import { db } from "~/server/db";
@@ -31,6 +31,8 @@ declare module "next-auth" {
   //   // role: UserRole;
   // }
 }
+const GOOGLE_CLIENT_ID = process.env.GOOGLE_CLIENT_ID!;
+const GOOGLE_CLIENT_SECRET = process.env.GOOGLE_CLIENT_SECRET!;
 
 /**
  * Options for NextAuth.js used to configure adapters, providers, callbacks, etc.
@@ -49,20 +51,29 @@ export const authOptions: NextAuthOptions = {
   },
   adapter: PrismaAdapter(db) as Adapter,
   providers: [
-    // DiscordProvider({
-    //   clientId: env.DISCORD_CLIENT_ID,
-    //   clientSecret: env.DISCORD_CLIENT_SECRET,
-    // }),
-    /**
-     * ...add more providers here.
-     *
-     * Most other providers require a bit more work than the Discord provider. For example, the
-     * GitHub provider requires you to add the `refresh_token_expires_in` field to the Account
-     * model. Refer to the NextAuth.js docs for the provider you want to use. Example:
-     *
-     * @see https://next-auth.js.org/providers/github
-     */
+    GoogleProvider({
+      clientId: GOOGLE_CLIENT_ID,
+      clientSecret: GOOGLE_CLIENT_SECRET,
+    }),
   ],
+  events: {
+    signIn: async ({ user }) => {
+      const existingUser = await db.user.findUnique({
+        where: { email: user.email || "" },
+      });
+
+      // If the user does not exist, create a new user record
+      if (!existingUser) {
+        await db.user.create({
+          data: {
+            name: user.name,
+            email: user.email,
+            image: user.image,
+          },
+        });
+      }
+    }
+  }
 };
 
 /**
