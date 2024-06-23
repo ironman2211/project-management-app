@@ -10,6 +10,13 @@ A simple project management app for the web.
 - [x] 1. Database Schema Design 
 - [x] 2. Endpoint Design
 
+## Frontend
+
+- [x] 3.User Authentication
+- [x] 4.UI Skeleton Setup
+- [x] 5.Dashboard [ Tasks section]
+- [ ] 6.Task Management Interface
+- [ ] 7.User Profile and Project Settings
 
 
 <!-- - [ ] 3. User Authentication
