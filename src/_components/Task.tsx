@@ -14,9 +14,19 @@ import { FaCircleDot } from "react-icons/fa6";
 import { RiEditBoxLine } from "react-icons/ri";
 import { timeAgo } from "~/utils/common";
 import { DialogTrigger } from "~/components/ui/dialog";
+import { MdDelete } from "react-icons/md";
 
+import {
+  HoverCard,
+  HoverCardContent,
+  HoverCardTrigger,
+} from "~/components/ui/hover-card";
+import { Button } from "~/components/ui/button";
+import { api } from "~/utils/api";
+import toast from "react-hot-toast";
 const Task = ({ task, edit }: any) => {
   const {
+    id,
     title,
     description,
     status,
@@ -59,18 +69,70 @@ const Task = ({ task, edit }: any) => {
       break;
   }
 
-  console.log(priority);
+  const deleteTask = () => {
+    if (id) deleteMutation({ id });
+  };
+  const [loading, setLoading] = React.useState(false);
+  const trpc = api.useContext();
+
+  const { mutate: deleteMutation } = api.tasks.deleteTask.useMutation({
+    onMutate: () => {
+      //   await trpc.tasks.getAll.cancel();
+      //   const previousData = trpc.tasks.getAll.getData();
+
+      //   trpc.tasks.getAll.setData((oldData) => {
+      //     if (!oldData) return [];
+      //     return oldData.filter((task) => task.id !== id);
+      //   });
+
+      setLoading(true);
+    },
+    //   return { previousData };
+    // },
+    // onError: (error, variables, context) => {
+    //   if (context?.previousData) {
+    //     trpc.tasks.getAll.setData(context.previousData);
+    //   }
+    //   setLoading(false);
+    //   toast.error("Failed to delete task");
+    // },
+    onSettled: async () => {
+      setLoading(false);
+      await trpc.tasks.getAll.invalidate();
+      toast.error("Task Deleted");
+    },
+  });
 
   return (
     <Card className="w-[400px]">
       <CardHeader className="gap-2 px-5 pt-8">
         <div className="flex w-full  items-start justify-between ">
           <CardTitle className="text-2xl">{title}</CardTitle>
-          <DialogTrigger asChild onClick={() => edit(task)}>
-            <button className="">
-              <RiEditBoxLine />
-            </button>
-          </DialogTrigger>
+          <div className="flex gap-2">
+            <DialogTrigger asChild onClick={() => edit(task)}>
+              <button className="">
+                <RiEditBoxLine />
+              </button>
+            </DialogTrigger>
+
+            <HoverCard>
+              <HoverCardTrigger>
+                {" "}
+                <button>
+                  <MdDelete />
+                </button>
+              </HoverCardTrigger>
+              <HoverCardContent className="flex flex-col items-center justify-center gap-6">
+                <div>Delete Task ?</div>
+                <Button
+                  className="bg-red-900 text-red-100"
+                  onClick={deleteTask}
+                >
+                  {loading ? "deleting..." : "DELETE"}
+                </Button>
+              </HoverCardContent>
+            </HoverCard>
+          </div>
         </div>
         <CardDescription>{description}</CardDescription>
       </CardHeader>
