@@ -24,6 +24,7 @@ import {
 import { Button } from "~/components/ui/button";
 import { api } from "~/utils/api";
 import toast from "react-hot-toast";
+import { useAppContext } from "~/context";
 const Task = ({ task, edit }: any) => {
   const {
     id,
@@ -72,7 +73,8 @@ const Task = ({ task, edit }: any) => {
   const deleteTask = () => {
     if (id) deleteMutation({ id });
   };
-  const [loading, setLoading] = React.useState(false);
+
+  const { loading, setLoading } = useAppContext();
   const trpc = api.useContext();
 
   const { mutate: deleteMutation } = api.tasks.deleteTask.useMutation({
@@ -104,7 +106,7 @@ const Task = ({ task, edit }: any) => {
   });
 
   return (
-    <Card className="w-[400px]">
+    <Card className="w-[450px]">
       <CardHeader className="gap-2 px-5 pt-8">
         <div className="flex w-full  items-start justify-between ">
           <CardTitle className="text-2xl">{title}</CardTitle>

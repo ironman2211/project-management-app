@@ -27,6 +27,7 @@ import { Priority, Status } from "@prisma/client";
 import { TaskDetails } from "~/interfaces";
 import { blankTask } from "~/utils/common";
 import { title } from "process";
+import { useAppContext } from "~/context";
 
 export function AddTasks({
   taskProps,
@@ -40,21 +41,21 @@ export function AddTasks({
   const [isUpdate] = React.useState(taskProps !== blankTask);
 
   const trpc = api.useContext();
+  const { setLoading } = useAppContext();
 
-  const [loading, setloading] = React.useState(false);
   const { mutate: addMutation } = api.tasks.createTask.useMutation({
-    onMutate: () => setloading(true),
+    onMutate: () => setLoading(true),
     onSettled: async () => {
-      setloading(false);
+      setLoading(false);
       await trpc.tasks.getAll.invalidate();
       toast.success("Task Added successfully");
     },
   });
 
   const { mutate: updateMutation } = api.tasks.updateTask.useMutation({
-    onMutate: () => setloading(true),
+    onMutate: () => setLoading(true),
     onSettled: async () => {
-      setloading(false);
+      setLoading(false);
       await trpc.tasks.getAll.invalidate();
       toast.success("Task Added successfully");
     },

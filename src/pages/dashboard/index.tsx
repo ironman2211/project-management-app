@@ -20,7 +20,7 @@ const Dashboard = () => {
 
   return (
     <BasePage title="Dashboard">
-      <div className="flex h-fit flex-col gap-3 p-5">
+      <div className="flex h-fit flex-col gap-3  p-5">
         <Dialog open={open} onOpenChange={setOpen}>
           <DialogTrigger asChild onClick={() => setCurrentTask(blankTask)}>
             <div className="flex items-center justify-start ">

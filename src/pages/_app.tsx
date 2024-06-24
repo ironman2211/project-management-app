@@ -8,17 +8,20 @@ import { api } from "~/utils/api";
 
 import "~/styles/globals.css";
 import Loader from "~/_components/Loader";
+import { AppWrapper } from "~/context";
 const MyApp: AppType<{ session: Session | null }> = ({
   Component,
   pageProps: { session, ...pageProps },
 }) => {
   return (
     <SessionProvider session={session}>
-      <main className={GeistSans.className}>
-        <Toaster />
-        <Loader />
-        <Component {...pageProps} />
-      </main>
+      <AppWrapper>
+        <main className={GeistSans.className}>
+          <Toaster />
+          <Loader />
+          <Component {...pageProps} />
+        </main>
+      </AppWrapper>
     </SessionProvider>
   );
 };
