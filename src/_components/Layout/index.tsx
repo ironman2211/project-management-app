@@ -20,7 +20,7 @@ export default function Layout({ pageTitle, children }: any) {
       <div className="min-h-screen ">
         <div className="flex h-screen w-screen">
           <Sidebar show={showSidebar} setter={setShowSidebar} />
-          <div className="flex min-h-[80vh] w-screen flex-grow flex-col md:w-full bg-slate-100 ">
+          <div className="flex min-h-[80vh] overflow-y-scroll w-screen flex-grow flex-col md:w-full bg-slate-100 ">
             <Navbar />
             {children}
           </div>

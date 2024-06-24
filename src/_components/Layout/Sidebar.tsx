@@ -8,9 +8,9 @@ export default function Sidebar({ show, setter }: any) {
   const router = useRouter();
 
   const className =
-    "bg-gray-900 w-[80px] transition-[margin-left] md:static top-0 bottom-0 left-0 z-40 py-10 ";
+    "bg-gray-900 w-[80px] fixed  transition-[margin-left] md:static top-0 bottom-0 left-0 z-40 py-10 ";
 
-  const appendClass = show ? " ml-0" : " ml-[-250px] md:ml-0";
+    const appendClass = show ? " ml-0" : " ml-[-250px] md:ml-0";
 
   const MenuItem = ({ icon, route }: any) => {
     const colorClass =
@@ -35,7 +35,7 @@ export default function Sidebar({ show, setter }: any) {
     <>
       <div className={`${className}${appendClass}`}>
         <div className="flex flex-col">
-          <MenuItem route="/dashboard" icon={<MdOutlineDashboard />} />
+          <MenuItem  route="/dashboard" icon={<MdOutlineDashboard />} />
           <MenuItem route="/user" icon={<FaRegUser />} />
         </div>
       </div>

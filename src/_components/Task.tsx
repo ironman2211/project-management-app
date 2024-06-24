@@ -15,7 +15,7 @@ import { RiEditBoxLine } from "react-icons/ri";
 import { timeAgo } from "~/utils/common";
 import { DialogTrigger } from "~/components/ui/dialog";
 
-const Task = ({ task }: any) => {
+const Task = ({ task, edit }: any) => {
   const {
     title,
     description,
@@ -60,16 +60,13 @@ const Task = ({ task }: any) => {
   }
 
   console.log(priority);
-  const edit = () => {
-    
-  };
 
   return (
     <Card className="w-[400px]">
       <CardHeader className="gap-2 px-5 pt-8">
         <div className="flex w-full  items-start justify-between ">
           <CardTitle className="text-2xl">{title}</CardTitle>
-          <DialogTrigger asChild onClick={edit}>
+          <DialogTrigger asChild onClick={() => edit(task)}>
             <button className="">
               <RiEditBoxLine />
             </button>

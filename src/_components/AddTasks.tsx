@@ -19,50 +19,75 @@ import {
   SelectTrigger,
   SelectValue,
 } from "~/components/ui/select";
+import { toast } from "react-hot-toast";
 import { DatePicker } from "./DatePicker";
 import { api } from "~/utils/api";
-import { taskInput } from "~/types";
+import { taskInput, updateInput } from "~/types";
 import { Priority, Status } from "@prisma/client";
-import { useSession } from "next-auth/react";
+import { TaskDetails } from "~/interfaces";
+import { blankTask } from "~/utils/common";
+import { title } from "process";
 
-interface TaskDetails {
-  title: string;
-  description: string;
-  status: string;
-  priority: string;
-  dueDate: Date;
-  assignId: string;
-}
-export function AddTasks() {
-  const [date, setDate] = React.useState<Date>(new Date());
-
-  const initialTaskDetails: TaskDetails = {
-    title: "",
-    description: "",
-    status: "",
-    priority: "",
-    dueDate: new Date(),
-    assignId: "",
-  };
+export function AddTasks({
+  taskProps,
+  setOpen,
+}: {
+  taskProps: TaskDetails;
+  setOpen: any;
+}) {
   const { data: users } = api.users.getAllUserNameAndId.useQuery();
-  const [task, settask] = React.useState<TaskDetails>(initialTaskDetails);
-  const { mutate } = api.tasks.createTask.useMutation();
+  const [task, settask] = React.useState<TaskDetails>(taskProps);
+  const [isUpdate] = React.useState(taskProps !== blankTask);
+
+  const trpc = api.useContext();
+
+  const [loading, setloading] = React.useState(false);
+  const { mutate: addMutation } = api.tasks.createTask.useMutation({
+    onMutate: () => setloading(true),
+    onSettled: async () => {
+      setloading(false);
+      await trpc.tasks.getAll.invalidate();
+      toast.success("Task Added successfully");
+    },
+  });
+
+  const { mutate: updateMutation } = api.tasks.updateTask.useMutation({
+    onMutate: () => setloading(true),
+    onSettled: async () => {
+      setloading(false);
+      await trpc.tasks.getAll.invalidate();
+      toast.success("Task Added successfully");
+    },
+  });
 
   const handleSubmit = () => {
-    settask({
-      ...task,
-      dueDate: new Date(task.dueDate)
-    });
-    if (task.title.length > 0) {
-      console.log(task);
-
+    if (!isUpdate) {
+      // Create a new task
       const result = taskInput.safeParse(task);
       if (!result.success) {
         console.log("Validation failed", result.error.format());
+        toast.error(
+          result.error.format()._errors.join(", ") || "Invalid Input",
+        );
       } else {
+        addMutation(result.data);
         console.log("Validation succeeded", result.data);
-        mutate(result.data);
-        settask(initialTaskDetails);
+        settask(blankTask);
+        setOpen(false);
+      }
+    } else {
+      // Update a task
+      const result = updateInput.safeParse(task);
+      if (!result.success) {
+        console.log("Validation failed", result.error.format());
+        toast.error(
+          result.error.format()._errors.join(", ") || "Invalid Input",
+        );
+      } else {
+        updateMutation(result.data);
+        console.log("Validation succeeded", result.data);
+        settask(blankTask);
+        setOpen(false);
       }
     }
   };
@@ -70,7 +95,9 @@ export function AddTasks() {
   return (
     <Card className="w-full">
       <CardHeader>
-        <CardTitle className="text-xl font-bold">Create Task</CardTitle>
+        <CardTitle className="text-xl font-bold">
+          {isUpdate ? "Update" : "Create"} Task
+        </CardTitle>
         <CardDescription>please specify all fields</CardDescription>
       </CardHeader>
       <CardContent>
@@ -135,7 +162,12 @@ export function AddTasks() {
 
             <div className="flex flex-col space-y-1.5">
               <Label htmlFor="name">Due Date</Label>
-              <DatePicker date={date} setDate={setDate} />
+              <DatePicker
+                date={task.deadline}
+                setDate={(date: Date) => {
+                  settask({ ...task, deadline: date });
+                }}
+              />
             </div>
             <div className="flex flex-col space-y-1.5">
               <Label htmlFor="framework">Assign To </Label>

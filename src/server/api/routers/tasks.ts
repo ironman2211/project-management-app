@@ -6,7 +6,7 @@ import {
   protectedProcedure,
   publicProcedure,
 } from "~/server/api/trpc";
-import { taskInput } from "~/types";
+import { taskInput, updateInput } from "~/types";
 
 export const tasksRouter = createTRPCRouter({
   getAll: protectedProcedure.query(({ ctx }) => {
@@ -21,8 +21,12 @@ export const tasksRouter = createTRPCRouter({
         createdBy: true,
         updatedBy: true,
         assignedTo: true,
-        createdAt:true
+        assignId: true,
+        createdAt: true,
       },
+      orderBy: {
+        updatedAt: "desc"
+      }
     });
     return tasks;
   }),
@@ -42,7 +46,7 @@ export const tasksRouter = createTRPCRouter({
   createTask: protectedProcedure
     .input(taskInput)
     .mutation(async ({ ctx, input }) => {
-      const { title, description, status, priority, dueDate, assignId } = input;
+      const { title, description, status, priority, deadline, assignId } = input;
 
       return await ctx.db.task.create({
         data: {
@@ -50,7 +54,7 @@ export const tasksRouter = createTRPCRouter({
           description,
           status: status as Status, // Cast 'status' to Status enum
           priority: priority as Priority, // Cast 'priority' to Priority enum
-          deadline: dueDate,
+          deadline,
           createdById: ctx.session.user.id, // Include 'createdById'
           assignId, // Use 'assignId'
           updatedById: ctx.session.user.id, // Include 'updatedById'
@@ -58,29 +62,20 @@ export const tasksRouter = createTRPCRouter({
       });
     }),
   updateTask: protectedProcedure
-    .input(
-      z.object({
-        id: z.number(),
-        title: z.string(),
-        description: z.string(),
-        status: z.enum(Object.values(Status) as [string, ...string[]]), // Validate 'status' as enum
-        priority: z.enum(Object.values(Priority) as [string, ...string[]]), // Validate 'priority' as enum
-        dueDate: z.date(),
-        assignId: z.string(),
-      })
-    )
+    .input(updateInput)
     .mutation(({ ctx, input }) => {
+      const { id, title, description, status, priority, deadline, assignId } = input;
       return ctx.db.task.update({
         where: {
           id: input.id,
         },
         data: {
-          title: input.title,
-          description: input.description,
-          status: input.status as Status, // Cast 'status' to Status enum
-          priority: input.priority as Priority, // Cast 'priority' to Priority enum
-          deadline: input.dueDate,
-          assignId: input.assignId, // Use 'assignId'
+          title,
+          description,
+          status: status as Status, // Cast 'status' to Status enum
+          priority: priority as Priority, // Cast 'priority' to Priority enum
+          deadline,
+          assignId, // Use 'assignId'
           updatedById: ctx.session.user.id, // Include 'updatedById'
         },
       });
