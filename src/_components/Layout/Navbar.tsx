@@ -3,11 +3,12 @@ import React from "react";
 import { signIn, signOut, useSession } from "next-auth/react";
 
 import { CiLogin, CiLogout } from "react-icons/ci";
+import { useAppContext } from "~/context";
 
 const Navbar = () => {
   const { data: sessionData, status } = useSession();
   console.log(status);
-
+  const { setLoading } = useAppContext();
   return (
     <div className="m-4 flex h-[9vh] items-center justify-between rounded-lg border-[2px] bg-white  p-8 text-black shadow-sm ">
       <b>LOGO</b>
@@ -31,7 +32,14 @@ const Navbar = () => {
           {sessionData?.user?.name}
           <button
             className="flex items-center justify-center gap-3 text-base"
-            onClick={sessionData ? () => void signOut() : () => void signIn()}
+            onClick={
+              sessionData
+                ? () => {
+                    signOut();
+                    setLoading(false);
+                  }
+                : () => void signIn()
+            }
           >
             {sessionData ? <CiLogout /> : <CiLogin />}
             {sessionData ? "Logout" : "Login"}

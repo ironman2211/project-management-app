@@ -2,12 +2,11 @@
 
 A simple project management app for the web.
 
-
 ## Requirements
 
 ## Backend
 
-- [x] 1. Database Schema Design 
+- [x] 1. Database Schema Design
 - [x] 2. Endpoint Design
 
 ## Frontend
@@ -15,19 +14,21 @@ A simple project management app for the web.
 - [x] 3.User Authentication
 - [x] 4.UI Skeleton Setup
 - [x] 5.Dashboard [ Tasks section]
-- [ ] 6.Task Management Interface
-- [ ] 7.User Profile and Project Settings
+- [x] 6.Task Management Interface
+- [x] 7.User Profile and Project Settings
 
+## REQUIREMENTS
+
+- 1. [x] Task Management Interface
+- 2. [x] User Profile and Project Settings
+- 3. [x] Deploy a Next.js Application
+- 4. [x] Database Integration with Supabase
+- 5. [ ] Dashboard (Optional)
 
 <!-- - [ ] 3. User Authentication
-## front end 
+## front end
 
 
-1. [] Task Management Interface 
-2. [] User Profile and Project Settings
-3. [] Deploy a Next.js Application
-4. [] Database Integration with Supabase
-5. [] Dashboard (Optional)
 
 ## Task
 - [ ] task creation,

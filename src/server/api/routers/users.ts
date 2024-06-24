@@ -20,4 +20,13 @@ export const userRoutes = createTRPCRouter({
             });
             return users;
         }),
+    getUser: protectedProcedure
+        .query(async ({ input, ctx }) => {
+            const user = await ctx.db.user.findUnique({
+                where: {
+                    id: ctx.session.user.id,
+                }
+            });
+            return user;
+        }),
 })
