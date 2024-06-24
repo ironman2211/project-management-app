@@ -9,12 +9,14 @@ const Navbar = () => {
   console.log(status);
 
   return (
-    <div className="flex h-[9vh] items-center justify-between bg-gray-900 px-8 text-white shadow-xl ">
+    <div className="m-4 flex h-[9vh] items-center justify-between rounded-lg border-[2px] bg-white  p-8 text-black shadow-sm ">
       <b>LOGO</b>
       {status === "loading" ? (
         "Loading..."
       ) : (
-        <div className="flex w-fit items-center justify-between gap-4 rounded-full bg-white/10 px-4 py-2 text-sm text-gray-100 ">
+        <div
+          className={`flex w-fit items-center justify-between gap-4 rounded-full  px-4 py-2 text-sm text-gray-900 ${sessionData?.user ? "bg-black/5" : ""}`}
+        >
           {sessionData?.user?.image ? (
             <div className="h-[30px] w-[30px] rounded-full bg-white shadow-lg">
               <img

@@ -7,6 +7,5 @@ export const taskInput = z.object({
   status: z.enum(Object.values(Status) as [string, ...string[]]), // Validate 'status' as enum
   priority: z.enum(Object.values(Priority) as [string, ...string[]]), // Validate 'priority' as enum
   dueDate: z.date(),
-  createdById: z.string(), // Correct field name
   assignId: z.string(),
 });

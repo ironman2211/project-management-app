@@ -10,7 +10,21 @@ import { taskInput } from "~/types";
 
 export const tasksRouter = createTRPCRouter({
   getAll: protectedProcedure.query(({ ctx }) => {
-    return ctx.db.task.findMany();
+    const tasks = ctx.db.task.findMany({
+      select: {
+        id: true,
+        title: true,
+        description: true,
+        status: true,
+        priority: true,
+        deadline: true,
+        createdBy: true,
+        updatedBy: true,
+        assignedTo: true,
+        createdAt:true
+      },
+    });
+    return tasks;
   }),
   getByTaskId: protectedProcedure
     .input(
@@ -28,7 +42,7 @@ export const tasksRouter = createTRPCRouter({
   createTask: protectedProcedure
     .input(taskInput)
     .mutation(async ({ ctx, input }) => {
-      const { title, description, status, priority, dueDate, createdById, assignId } = input;
+      const { title, description, status, priority, dueDate, assignId } = input;
 
       return await ctx.db.task.create({
         data: {
@@ -37,9 +51,9 @@ export const tasksRouter = createTRPCRouter({
           status: status as Status, // Cast 'status' to Status enum
           priority: priority as Priority, // Cast 'priority' to Priority enum
           deadline: dueDate,
-          createdById, // Use 'createdById'
+          createdById: ctx.session.user.id, // Include 'createdById'
           assignId, // Use 'assignId'
-          updatedById: createdById, // Include 'updatedById'
+          updatedById: ctx.session.user.id, // Include 'updatedById'
         },
       });
     }),
@@ -83,6 +97,6 @@ export const tasksRouter = createTRPCRouter({
           id: input.id,
         },
       });
-    }), 
-  
+    }),
+
 });
