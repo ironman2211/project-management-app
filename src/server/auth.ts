@@ -57,25 +57,25 @@ export const authOptions: NextAuthOptions = {
       clientSecret: GOOGLE_CLIENT_SECRET,
     }),
   ],
-  // events: {
-  //   signIn: async ({ user }) => {
-  //     const existingUser = await db.user.findUnique({
-  //       where: { email: user.email ?? "" },
-  //     });
+  events: {
+    signIn: async ({ user }) => {
+      const existingUser = await db.user.findUnique({
+        where: { email: user.email ?? "" },
+      });
 
-  //     // If the user does not exist, create a new user record
-  //     if (!existingUser) {
-  //       await db.user.create({
-  //         data: {
-  //           name: user.name,
-  //           email: user.email,
-  //           image: user.image,
-  //         },
-  //       });
-  //     }
-  //     redirect("/dashboard");
-  //   }
-  // }
+      // If the user does not exist, create a new user record
+      if (!existingUser) {
+        await db.user.create({
+          data: {
+            name: user.name,
+            email: user.email,
+            image: user.image,
+          },
+        });
+      }
+      redirect("/dashboard");
+    }
+  }
 };
 
 /**
