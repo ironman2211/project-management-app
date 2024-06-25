@@ -25,7 +25,14 @@ import { Button } from "~/components/ui/button";
 import { api } from "~/utils/api";
 import toast from "react-hot-toast";
 import { useAppContext } from "~/context";
-const Task = ({ task, edit }: any) => {
+import { TaskDetails, TaskResponse } from "~/interfaces";
+const Task = ({
+  task,
+  edit,
+}: {
+  task: TaskResponse;
+  edit: (task: TaskResponse) => void;
+}) => {
   const {
     id,
     title,
@@ -36,7 +43,6 @@ const Task = ({ task, edit }: any) => {
     createdBy,
     createdAt,
   } = task;
-  console.log(createdAt);
 
   // Determine status color
   let statusColor;
@@ -147,16 +153,20 @@ const Task = ({ task, edit }: any) => {
 
               <b>assigned to</b>
             </div>
-            <div className="flex items-center gap-2">
-              <div className={`h-5 w-5 rounded-full border-2 border-gray-100`}>
-                <img
-                  src={assignedTo.image}
-                  alt={assignedTo.name}
-                  className="h-full w-full rounded-full"
-                />
+            {assignedTo.image && assignedTo.name && (
+              <div className="flex items-center gap-2">
+                <div
+                  className={`h-5 w-5 rounded-full border-2 border-gray-100`}
+                >
+                  <img
+                    src={assignedTo.image}
+                    alt={assignedTo.name}
+                    className="h-full w-full rounded-full"
+                  />
+                </div>
+                <span>{assignedTo.name}</span>
               </div>
-              <span>{assignedTo.name}</span>
-            </div>
+            )}
           </div>
           <div className="flex w-full items-center justify-between gap-2">
             <div className="flex items-center gap-2">
@@ -187,17 +197,19 @@ const Task = ({ task, edit }: any) => {
           </div>
         </div>
         <div className="mt-10 flex w-full  items-start justify-between text-sm">
-          <div className="flex  items-center justify-between gap-1 text-xs">
-            Created by:{" "}
-            <div className={`h-5 w-5 rounded-full border-2 border-gray-100 `}>
-              <img
-                src={createdBy.image}
-                alt={createdBy.name}
-                className="h-full w-full rounded-full"
-              />
-            </div>{" "}
-            {createdBy.name}
-          </div>
+          {createdBy.name && createdBy.image && (
+            <div className="flex  items-center justify-between gap-1 text-xs">
+              Created by:{" "}
+              <div className={`h-5 w-5 rounded-full border-2 border-gray-100 `}>
+                <img
+                  src={createdBy.image}
+                  alt={createdBy.name}
+                  className="h-full w-full rounded-full"
+                />
+              </div>{" "}
+              {createdBy.name}
+            </div>
+          )}
           <p className="text-xs"> {timeAgo(createdAt)}</p>
         </div>
       </CardContent>

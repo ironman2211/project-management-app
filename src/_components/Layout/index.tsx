@@ -4,13 +4,13 @@ import Head from "next/head";
 import Sidebar from "./Sidebar";
 import Navbar from "./Navbar";
 
-export default function Layout({ pageTitle, children }: any) {
+export default function Layout({ pageTitle, children }: { pageTitle: string; children: React.ReactNode }) {
   // Concatenate page title (if exists) to site title
   let titleConcat = "Responsive Sidebar Example";
   if (pageTitle) titleConcat = pageTitle + " | " + titleConcat;
 
   // Mobile sidebar visibility state
-  const [showSidebar, setShowSidebar] = useState(false);
+  const [showSidebar, setShowSidebar] = useState<boolean>(false);
 
   return (
     <>

@@ -1,3 +1,4 @@
+"use client";
 import React from "react";
 import { Puff } from "react-loader-spinner";
 import { useAppContext } from "~/context";
@@ -11,7 +12,7 @@ const Loader = () => {
           visible={true}
           height={80}
           width={80}
-          color="#4fa94d"
+          color="#b673f5"
           ariaLabel="puff-loading"
           wrapperStyle={{}}
           wrapperClass=""

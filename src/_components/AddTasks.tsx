@@ -34,7 +34,7 @@ export function AddTasks({
   setOpen,
 }: {
   taskProps: TaskDetails;
-  setOpen: any;
+  setOpen: React.Dispatch<React.SetStateAction<boolean>>;
 }) {
   const { data: users } = api.users.getAllUserNameAndId.useQuery();
   const [task, settask] = React.useState<TaskDetails>(taskProps);
@@ -92,7 +92,9 @@ export function AddTasks({
       }
     }
   };
-
+  const handleSetDeadline = (date: Date) => {
+    settask({ ...task, deadline: date });
+  };
   return (
     <Card className="w-full">
       <CardHeader>
@@ -163,12 +165,7 @@ export function AddTasks({
 
             <div className="flex flex-col space-y-1.5">
               <Label htmlFor="name">Due Date</Label>
-              <DatePicker
-                date={task.deadline}
-                setDate={(date: Date) => {
-                  settask({ ...task, deadline: date });
-                }}
-              />
+              <DatePicker date={task.deadline} setDate={handleSetDeadline} />
             </div>
             <div className="flex flex-col space-y-1.5">
               <Label htmlFor="framework">Assign To </Label>

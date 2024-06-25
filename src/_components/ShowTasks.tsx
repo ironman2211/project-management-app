@@ -2,14 +2,27 @@
 import React, { use } from "react";
 import { api } from "~/utils/api";
 import Task from "./Task";
-import { TaskDetails } from "~/interfaces";
+import { TaskDetails, TaskResponse } from "~/interfaces";
 import { title } from "process";
 import { useAppContext } from "~/context";
 
-const ShowTasks = ({ setCurrentTask }: any) => {
+const ShowTasks = ({
+  setCurrentTask,
+}: {
+  setCurrentTask: React.Dispatch<React.SetStateAction<TaskDetails>>;
+}) => {
   const { data: tasks, isLoading, isError } = api.tasks.getAll.useQuery();
-  const editTask = (task: TaskDetails) => {
-    setCurrentTask(task);
+  const editTask = (task: TaskResponse) => {
+    const taskdetails: TaskDetails = {
+      id: task.id,
+      title: task.title,
+      description: task.description,
+      status: task.status,
+      priority: task.priority,
+      deadline: task.deadline,
+      assignId: task.assignId,
+    };
+    setCurrentTask(taskdetails);
   };
   const { setLoading } = useAppContext();
   if (isLoading) {

@@ -4,7 +4,7 @@ import Navbar from "../_components/Layout/Navbar";
 import { useEffect } from "react";
 import { useRouter } from "next/navigation";
 
-export default function Home(props: any) {
+export default function Home() {
   const { data: sessionData, status } = useSession();
   const router = useRouter();
 

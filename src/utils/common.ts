@@ -28,6 +28,7 @@ function timeAgo(date: Date): string {
 }
 
 const blankTask: TaskDetails = {
+  id:0,
   title: "",
   description: "",
   status: "",

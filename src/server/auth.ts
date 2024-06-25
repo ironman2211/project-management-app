@@ -60,7 +60,7 @@ export const authOptions: NextAuthOptions = {
   events: {
     signIn: async ({ user }) => {
       const existingUser = await db.user.findUnique({
-        where: { email: user.email || "" },
+        where: { email: user.email ?? "" },
       });
 
       // If the user does not exist, create a new user record
