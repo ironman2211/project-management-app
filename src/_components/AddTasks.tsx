@@ -41,7 +41,7 @@ export function AddTasks({
   const [isUpdate] = React.useState(taskProps !== blankTask);
 
   const trpc = api.useContext();
-  const { setLoading } = useAppContext();
+  const { loading, setLoading } = useAppContext();
 
   const { mutate: addMutation } = api.tasks.createTask.useMutation({
     onMutate: () => setLoading(true),
@@ -57,7 +57,7 @@ export function AddTasks({
     onSettled: async () => {
       setLoading(false);
       await trpc.tasks.getAll.invalidate();
-      toast.success("Task Added successfully");
+      toast.success("Task Updated successfully");
     },
   });
 
@@ -95,6 +95,9 @@ export function AddTasks({
   const handleSetDeadline = (date: Date) => {
     settask({ ...task, deadline: date });
   };
+  console.log(loading);
+  
+  if (loading) return <>Loading ....</>;
   return (
     <Card className="w-full">
       <CardHeader>

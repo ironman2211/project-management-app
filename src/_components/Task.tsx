@@ -12,9 +12,10 @@ import { MdOutlinePriorityHigh } from "react-icons/md";
 import { Priority } from "@prisma/client";
 import { FaCircleDot } from "react-icons/fa6";
 import { RiEditBoxLine } from "react-icons/ri";
-import { timeAgo } from "~/utils/common";
+import { convertdate, timeAgo } from "~/utils/common";
 import { DialogTrigger } from "~/components/ui/dialog";
 import { MdDelete } from "react-icons/md";
+import { PiTargetBold } from "react-icons/pi";
 
 import {
   HoverCard,
@@ -40,6 +41,7 @@ const Task = ({
     status,
     assignedTo,
     priority,
+    deadline,
     createdBy,
     createdAt,
   } = task;
@@ -193,6 +195,16 @@ const Task = ({
               }
             >
               <span>{priority.toLowerCase()}</span>
+            </div>
+          </div>
+          <div className="flex w-full items-center justify-between gap-2">
+            <div className="flex items-center gap-2">
+              <PiTargetBold />
+
+              <b>Deadline</b>
+            </div>
+            <div>
+              <span>{convertdate(deadline)}</span>
             </div>
           </div>
         </div>

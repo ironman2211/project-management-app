@@ -27,8 +27,19 @@ function timeAgo(date: Date): string {
   return `${yearsPast} year${yearsPast > 1 ? "s" : ""} ago`;
 }
 
+function convertdate(date: Date): string {
+  const options: Intl.DateTimeFormatOptions = {
+    year: "numeric",
+    month: "short",
+    day: "numeric",
+    hour: "numeric",
+    minute: "numeric",
+    second: "numeric",
+  };
+  return new Intl.DateTimeFormat("en-US", options).format(date);
+}
 const blankTask: TaskDetails = {
-  id:0,
+  id: 0,
   title: "",
   description: "",
   status: "",
@@ -37,4 +48,4 @@ const blankTask: TaskDetails = {
   assignId: "",
 };
 
-export { timeAgo, blankTask };
+export { timeAgo, blankTask, convertdate };
